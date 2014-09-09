@@ -16,7 +16,7 @@ for l in open(BASE_FOLDER + '/../dict/treatise_measurements.txt').read().splitli
 for l in open(BASE_FOLDER + '/../dict/paleodb_taxons.tsv'):
   try:
     (rawname, rank) = l.rstrip().split('\t')
-    
+
     ss = rawname.split(' ')
     if len(ss) == 1:
       dict_fossils[ss[0].lower()] = rank
@@ -31,7 +31,6 @@ for l in open(BASE_FOLDER + '/../dict/paleodb_taxons.tsv'):
             s = s.replace('(', '').replace(')', '')
           if 'species' in rank and ' ' not in s: continue
           dict_fossils[s.lower()] = rank
-
     elif len(ss) == 3:
       if '(' not in rawname:
         dict_fossils[name.lower()] = rank
@@ -44,7 +43,6 @@ for l in open(BASE_FOLDER + '/../dict/paleodb_taxons.tsv'):
   
   except:
     continue
-
 
 # For each input tuple
 cache = {}
@@ -63,15 +61,13 @@ for row in sys.stdin:
 
     egenus = ""
     if w.lower() in dict_species_lastword:
-      if prevword.lower() in dict_fossils and prevword != "" and len(prevword) > 3: ## How to fix P
-        cgenus = prevword.lower() + ' ' + w.lower()
+      if prevword.lower() in dict_fossils and prevword != "": ## How to fix P # and len(prevword) > 3:
         egenus = prevword + ' ' + w
         egenus = re.sub('[^a-zA-Z ]', '' , egenus.encode('ascii', 'ignore'))
       elif prevword != "":
         prev2 = re.sub('[^a-zA-Z0-9\.]', '', prevword)
         if re.search('^[A-Z]\.?$', prev2):
           if prev2[0].lower() in cache:
-            cgenus = prevword.lower() + ' ' + w.lower()
             egenus = cache[prev2[0].lower()] + ' ' + w.lower()
             egenus = re.sub('[^a-zA-Z ]', '' , egenus.encode('ascii', 'ignore'))
 
@@ -81,14 +77,4 @@ for row in sys.stdin:
 
     prevword = w
     id = id + 1
-
-  #print >> sys.stderr, words
-
-  #print json.dumps({"person1_id": obj["p1_mention_id"],  "person2_id": obj["p2_mention_id"],
-  #  "sentence_id": obj["sentence_id"],  "description": "%s-%s" %(p1_text, p2_text),
-  #  "is_true": is_true,  "relation_id": relation_id,  "id": None
-  #})
-
-
-
 
